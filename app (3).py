@@ -602,20 +602,11 @@ if run_btn:
             pf, inv = run_backtest(prices, weights, monthly_yields, cfg, cost)
             results[name] = (pf, inv)
 
-    # ── 1. 차트 (실패해도 계속 진행) ──
-    st.markdown("## 성과 차트")
-    try:
-        fig = make_chart(results)
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
-    except Exception as e:
-        st.warning(f"차트를 표시할 수 없습니다: {e}")
-
-    # ── 2. 성과 카드 (항상 표시) ──
+    # ── 1. 성과 카드 (최우선 출력) ──
     st.markdown("## 시나리오별 성과")
     show_cards(results)
 
-    # ── 3. 비교 테이블 (항상 표시) ──
+    # ── 2. 비교 테이블 ──
     st.markdown("## 시나리오 비교")
     rows = []
     for name, (pf, inv) in results.items():
@@ -633,21 +624,29 @@ if run_btn:
         })
     st.dataframe(pd.DataFrame(rows).set_index("시나리오"), use_container_width=True)
 
-    # ── 4. AI 리포트 (항상 표시) ──
-    st.markdown("## AI 해석 리포트")
-    with st.spinner(f"{USER_NAME}님을 위한 분석 리포트를 작성하는 중입니다..."):
-        try:
-            report = gen_report(results, weights, monthly_yields,
-                                cost, start_date, end_date)
-            st.markdown(f'<div class="report-box">{report}</div>',
-                        unsafe_allow_html=True)
-        except Exception as e:
-            st.warning(f"리포트 생성에 실패했습니다: {e}")
-
-    # ── 5. 기록 저장 ──
+    # ── 3. 기록 저장 ──
     label = run_label.strip() if run_label.strip() else f"테스트 {len(st.session_state.history)+1}"
     save_history(results, label, start_date, end_date, weights)
     st.success(f"'{label}' 결과가 기록 보관함에 저장되었습니다.")
+
+    # ── 4. 차트 ──
+    st.markdown("## 성과 차트")
+    try:
+        fig = make_chart(results)
+        st.pyplot(fig, use_container_width=True)
+        plt.close(fig)
+    except Exception as e:
+        st.warning(f"차트를 표시할 수 없습니다: {e}")
+
+    # ── 5. AI 리포트 (마지막, 실패해도 위 결과에 영향 없음) ──
+    st.markdown("## AI 해석 리포트")
+    try:
+        report = gen_report(results, weights, monthly_yields,
+                            cost, start_date, end_date)
+        st.markdown(f'<div class="report-box">{report}</div>',
+                    unsafe_allow_html=True)
+    except Exception as e:
+        st.warning(f"리포트 생성에 실패했습니다: {e}")
 
     # ── 6. JSON 다운로드 ──
     json_out = {}
