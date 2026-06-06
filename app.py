@@ -33,93 +33,78 @@ st.set_page_config(
 # ── CSS: 다크모드 완전 차단, 토스 스타일 ──────────────────
 st.markdown("""
 <style>
-/* 다크모드 강제 해제 */
-:root { color-scheme: light only; }
-html, body { background-color: #f2f4f6 !important; color: #191f28 !important; }
-.stApp { background-color: #f2f4f6 !important; }
-section[data-testid="stSidebar"] { background-color: #ffffff !important; }
-.block-container { padding: 2rem 1.5rem 4rem !important; }
+/* ── 다크모드 완전 차단 ── */
+html, body, .stApp, [data-testid="stAppViewContainer"],
+[data-testid="stHeader"], .main { background-color: #f2f4f6 !important; }
+section[data-testid="stSidebar"], section[data-testid="stSidebar"] > div {
+    background-color: #ffffff !important;
+}
+.block-container { padding: 2rem 1.2rem 4rem !important; }
 
-/* 모든 텍스트 강제 다크 */
-p, span, div, label, li, h1, h2, h3, h4, caption,
-[class*="st-"], [data-testid] {
+/* ── 폰트·텍스트 전역 ── */
+html, body, p, span, label, div, h1, h2, h3, h4, li, td, th,
+input, textarea, button, select, [class*="st-"] {
+    font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR",
+                 "Malgun Gothic", sans-serif !important;
     color: #191f28 !important;
 }
 
-/* 헤더 */
-h1 { font-size: 1.4rem !important; font-weight: 800 !important;
-     letter-spacing: -0.03em; margin-bottom: 4px !important; }
-h2 { font-size: 1rem !important; font-weight: 700 !important;
-     margin-top: 2rem !important; margin-bottom: 0.6rem !important;
-     padding-bottom: 8px; border-bottom: 1px solid #e8eaed; }
+/* ── 타이포 ── */
+h1 { font-size: 1.45rem !important; font-weight: 800 !important;
+     letter-spacing: -0.03em !important; }
+h2 { font-size: 1.05rem !important; font-weight: 700 !important;
+     padding-bottom: 10px !important; margin-top: 2.2rem !important;
+     border-bottom: 1px solid #e8eaed !important; }
 
-/* 버튼 */
+/* ── 버튼 ── */
 .stButton > button {
-    background-color: #3182f6 !important;
+    background: #3182f6 !important;
     color: #ffffff !important;
     border: none !important;
-    border-radius: 10px !important;
+    border-radius: 12px !important;
     font-size: 1rem !important;
     font-weight: 700 !important;
-    padding: 0.7rem 0 !important;
+    padding: 0.72rem 0 !important;
     width: 100% !important;
-    letter-spacing: -0.01em;
+    box-shadow: 0 2px 8px rgba(49,130,246,0.22) !important;
 }
-.stButton > button:hover { background-color: #1b64da !important; }
-.stButton > button:focus { box-shadow: none !important; }
+.stButton > button:hover { background: #1b64da !important; }
 
-/* 탭 */
+/* ── 탭 ── */
 .stTabs [data-baseweb="tab-list"] {
-    gap: 0 !important;
-    background: #f2f4f6 !important;
-    border-bottom: 1px solid #e8eaed !important;
+    background: transparent !important;
+    border-bottom: 1.5px solid #e8eaed !important; gap: 0 !important;
 }
 .stTabs [data-baseweb="tab"] {
     font-size: 0.9rem !important; font-weight: 500 !important;
-    color: #8b95a1 !important; padding: 10px 18px !important;
+    color: #8b95a1 !important; padding: 10px 20px !important;
     background: transparent !important;
-    border-bottom: 2px solid transparent !important;
+    border-bottom: 2.5px solid transparent !important; margin-bottom: -1.5px !important;
 }
 .stTabs [aria-selected="true"] {
     color: #191f28 !important; font-weight: 700 !important;
-    border-bottom: 2px solid #3182f6 !important;
-    background: transparent !important;
+    border-bottom: 2.5px solid #3182f6 !important;
 }
 
-/* 입력창 */
-.stNumberInput input, .stTextInput input, .stTextArea textarea {
-    background: #ffffff !important;
-    color: #191f28 !important;
-    border: 1px solid #e8eaed !important;
-    border-radius: 8px !important;
+/* ── 입력 ── */
+input, textarea, .stNumberInput input, .stTextInput input, .stTextArea textarea {
+    background: #ffffff !important; color: #191f28 !important;
+    border: 1.5px solid #e8eaed !important; border-radius: 10px !important;
 }
-.stSlider { color: #191f28 !important; }
 
-/* 메트릭 숨김 (커스텀 카드 사용) */
+/* ── expander ── */
+details { background: #ffffff !important; border: 1px solid #e8eaed !important;
+          border-radius: 12px !important; padding: 4px 14px !important; }
+
+/* ── 알림 ── */
+[data-testid="stAlert"] { border-radius: 10px !important; border-left-width: 3px !important; }
+
+/* ── 기타 ── */
+hr { border: none !important; border-top: 1px solid #e8eaed !important; margin: 1.8rem 0 !important; }
+[data-testid="stCaptionContainer"], .stCaption { color: #8b95a1 !important; font-size: 0.8rem !important; }
+.stDataFrame { border-radius: 12px !important; overflow: hidden !important; }
 [data-testid="metric-container"] { display: none !important; }
-
-/* 알림 박스 */
-.stAlert { border-radius: 10px !important; }
-.stInfo { background: #ebf3fe !important; border-color: #3182f6 !important; }
-.stSuccess { background: #e8faf2 !important; border-color: #00c471 !important; }
-.stWarning { background: #fff8e8 !important; border-color: #f5a623 !important; }
-
-/* 구분선 */
-hr { border: none !important; border-top: 1px solid #e8eaed !important; margin: 1.5rem 0 !important; }
-
-/* expander */
-.streamlit-expanderHeader { font-weight: 600 !important; color: #191f28 !important; }
-details { background: #ffffff !important; border-radius: 10px !important;
-          border: 1px solid #e8eaed !important; padding: 4px 12px !important; }
-
-/* dataframe */
-.stDataFrame { border-radius: 10px !important; overflow: hidden !important; }
-
-/* caption */
-.stCaption, [data-testid="stCaptionContainer"] { color: #8b95a1 !important; font-size: 0.8rem !important; }
-
-/* footer */
-footer { visibility: hidden; }
+footer, #MainMenu { visibility: hidden !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -239,14 +224,26 @@ def calc_metrics(pf, inv):
     cf[pf.index[-1]] = cf.get(pf.index[-1], 0) + fv
     full = pd.Series(0.0, index=pf.index)
     for d, v in cf.sort_index().items(): full[d] += v
-    irr = npf.irr(full.values)
-    cagr = (1 + irr) ** 252 - 1 if not np.isnan(irr) else 0
+
+    # IRR: NaN/inf/극단값 방어
+    try:
+        vals = full.values
+        vals = np.where(np.isfinite(vals), vals, 0.0)
+        irr = npf.irr(vals)
+        if np.isnan(irr) or np.isinf(irr) or irr < -1:
+            irr = 0.0
+        cagr = (1 + irr) ** 252 - 1
+        if not np.isfinite(cagr): cagr = 0.0
+    except Exception:
+        cagr = 0.0
+
     dep_days = set(diff[diff > 0].index)
     prev = pf.shift(1).bfill(); dc = pf.diff().fillna(0)
     twr = pd.Series(0.0, index=pf.index)
     for d in pf.index:
         if d not in dep_days and prev[d] > 0: twr[d] = dc[d] / prev[d]
     vol = twr.std() * np.sqrt(252)
+    if not np.isfinite(vol): vol = 0.0
     return dict(
         ti=ti, fv=fv, profit=fv-ti, ret=ret*100,
         cagr=cagr*100, vol=vol*100,
@@ -572,4 +569,3 @@ st.markdown(
     '</p>',
     unsafe_allow_html=True
 )
-
